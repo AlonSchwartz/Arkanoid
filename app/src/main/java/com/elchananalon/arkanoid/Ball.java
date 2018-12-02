@@ -12,9 +12,12 @@ public class Ball {
     private Paint pen;
 
     // Constructor
-    public Ball(float xPosition, float yPosition) {
+    public Ball(float xPosition, float yPosition, float radius) {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
+        this.radius = radius;
+        this.dx = 0;
+        this.dy = 0;
         this.pen = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.color = Color.WHITE;
     }
@@ -82,6 +85,24 @@ public class Ball {
     {
         setxPosition(xNewLocation);
         setyPosition(yNewLocation);
+    }
+    public void move(int w, int h)
+    {
+        this.xPosition+= dx;
+        this.yPosition+= dy;
+
+        // check if ball out of left or right side
+        if((xPosition-radius)<=0 || (xPosition+radius)>=w)
+        {
+            dx = -dx;
+        }
+
+        // check if ball out of bottom or up side
+        if((yPosition+radius)>=h || (yPosition-radius)<=0)
+        {
+            dy = -dy;
+        }
+
     }
 
 }
