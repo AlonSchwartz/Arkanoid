@@ -5,34 +5,53 @@ import android.graphics.Color;
 
 import java.util.ArrayList;
 
-// NOT READY YET
 public class BrickCollection {
-
-    Brick brick = new Brick(100,50,200,50, Color.RED);
 
     private static final int ROWS = 5, COLS= 5;
     private ArrayList<Brick> bricks;
 
-    //Constructor. We can also do a constructor that gets ROWS, COLS & Brick
-    public BrickCollection(float width, float height, float startingXPosition, float startingYPosition, int padding, int color) {
+    //Constructor. Will build a set of bricks at width X height size, with padding between them
+    public BrickCollection(float width, float height, float startingXPosition, float startingYPosition, float padding, int color) {
 
-      bricks = new ArrayList<>();
+        bricks = new ArrayList<>();
 
-      if (padding<=0){
-          padding =(int) width/10;
-      }
+        if (padding <= 0) {
+            padding = (int) width / 10;
+        }
+        float prevX = 0; //To store previous block X position
+        float shiftRight = 0;
 
-        for (int i=0; i<ROWS ; i++)
-      {
-          Brick brick = new Brick(width,height,startingXPosition+padding,startingYPosition, Color.RED);
-          bricks.add(brick);
-          padding+=padding;
-
-      }
+        for (int j = 0; j < COLS; j++) {
+            for (int i = 0; i < ROWS; i++) {
+                if (i == 0) {
+                    bricks.add(new Brick(width, height, startingXPosition, startingYPosition, color));
+                    shiftRight = padding + width; // We need to shift right from the first brick only
+                }
+                else{
+                    bricks.add(new Brick(width, height, prevX + shiftRight, startingYPosition, color));
+                }
+                prevX = bricks.get(i).getxPosition();
+            }
+            startingYPosition += padding + height;
+            shiftRight = 0;
+            prevX=0;
+        }
     }
+
+    // to get the arrayList
+    public ArrayList<Brick> getBricks() {
+        return bricks;
+    }
+    /**********************************************************/
+
     public void draw(Canvas canvas) {
        for (int i =0; i<bricks.size();i++)
            bricks.get(i).draw(canvas);
+
+    }
+
+    public void remove(int i){
+        bricks.remove(i);
     }
 }
 

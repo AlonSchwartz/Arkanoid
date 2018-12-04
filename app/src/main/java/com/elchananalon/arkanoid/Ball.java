@@ -131,6 +131,7 @@ public class Ball {
     {
         if (this.xPosition+radius >= brick.getxPosition() && this.xPosition+radius <= brick.getxPosition()+brick.getWidth()){
             if (this.yPosition+radius <= brick.getyPosition()+brick.getHeight() &&(this.yPosition+radius > brick.getyPosition())) {
+                dy = -dy; // NOT SURE IF THIS NEEDS TO BE HERE OR AT GAMEVIEW
                 return true; // HIT
             }
         }
