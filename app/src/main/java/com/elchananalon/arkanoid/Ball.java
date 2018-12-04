@@ -8,7 +8,7 @@ public class Ball {
 
     private float dx,dy;// Moving direction
     private float xPosition, yPosition, radius;
-    private int color;
+    private int color, speed=5;
     private Paint pen;
 
     // Constructor
@@ -20,6 +20,7 @@ public class Ball {
         this.dy = 0;
         this.pen = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.color = Color.WHITE;
+        this.radius = 20;
     }
 
     /**********************************************************/
@@ -73,6 +74,10 @@ public class Ball {
         this.color = color;
     }
 
+    public int getSpeed() {return speed; }
+
+    public void setSpeed(int speed) {this.speed = speed;  }
+
     /**********************************************************/
 
     public void draw(Canvas canvas)
@@ -88,8 +93,8 @@ public class Ball {
     }
     public void move(int w, int h)
     {
-        this.xPosition+= dx;
-        this.yPosition+= dy;
+        //this.xPosition+= dx;
+        this.yPosition+= -dy;
 
         // check if ball out of left or right side
         if((xPosition-radius)<=0 || (xPosition+radius)>=w)
@@ -97,12 +102,39 @@ public class Ball {
             dx = -dx;
         }
 
+
         // check if ball out of bottom or up side
-        if((yPosition+radius)>=h || (yPosition-radius)<=0)
+        if(yPosition-radius<=0)
         {
             dy = -dy;
         }
 
+    }
+
+    public boolean collideWith(Paddle paddle)
+    {
+        // If the x position of the ball is between the paddle x boundaries
+        if ((this.xPosition+this.radius >= paddle.getXPosition()) && (this.xPosition+this.radius <= paddle.getXPosition()+paddle.getWidth()) )
+        {
+            // and also y position of the ball is touching the paddle
+            if ((this.yPosition+this.radius >= paddle.getYPosition()) && (this.yPosition + this.radius<=paddle.getYPosition()+paddle.getHeight()))
+            {
+                // HIT! Change the ball direction
+                dy = -dy;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean collideWith(Brick brick)
+    {
+        if (this.xPosition+radius >= brick.getxPosition() && this.xPosition+radius <= brick.getxPosition()+brick.getWidth()){
+            if (this.yPosition+radius <= brick.getyPosition()+brick.getHeight() &&(this.yPosition+radius > brick.getyPosition())) {
+                return true; // HIT
+            }
+        }
+        return false;
     }
 
 }

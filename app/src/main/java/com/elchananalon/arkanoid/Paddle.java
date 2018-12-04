@@ -7,9 +7,9 @@ import android.graphics.Paint;
 public class Paddle {
 
     private float width, height, xPosition, yPosition;
-    private static final float xStartingPosition=5, yStartingPosition=3;
+    private static final float xStartingPosition=500, yStartingPosition=650, RIGHT=0, LEFT=1;
     private Paint pen;
-    private int color = Color.BLUE;
+    private int color = Color.BLUE, speed = 5;
 
 
     // Constructor
@@ -58,18 +58,38 @@ public class Paddle {
         this.yPosition = yPosition;
     }
 
+    public int getSpeed() {return speed; }
+
+    public void setSpeed(int speed) {this.speed = speed; }
+
     /**********************************************************/
 
     public void draw(Canvas canvas){
         pen.setColor(color);
-        canvas.drawRect(210, 220, 500, 100, pen);
+        canvas.drawRect(xPosition, yPosition, xPosition+width,yPosition+height-5, pen);
+        /*
+        *   left: The X coordinate of the left side of the rectangle
+            top: The Y coordinate of the top of the rectangle
+            right: The X coordinate of the right side of the rectangle
+            bottom: The Y coordinate of the bottom of the rectangle
 
+        // A= X_ScreenSize / 2,B= Y_ScreenSize - 40,A+width, B+height
+        */
     }
 
     /**********************************************************/
-    public void move(){
+    public void move(int w, int h, int direction){
 
-
+        //Move to left
+        if (xPosition+width >= width && direction == LEFT)
+        {
+            xPosition -= speed;
+        }
+        //Move to right
+        if (xPosition+width < w && direction == RIGHT)
+        {
+            xPosition += speed;
+        }
 
     }
 

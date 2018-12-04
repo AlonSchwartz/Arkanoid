@@ -67,7 +67,14 @@ public class Brick {
     public void draw(Canvas canvas)
     {
         pen.setColor(color);
-        canvas.drawRect(123, 456, 500, 100, pen);
+        canvas.drawRect(xPosition, yPosition, xPosition+width, yPosition+height, pen);
+
+         /*
+        *   left: The X coordinate of the left side of the rectangle
+            top: The Y coordinate of the top of the rectangle
+            right: The X coordinate of the right side of the rectangle
+            bottom: The Y coordinate of the bottom of the rectangle
+        */
     }
 
 }

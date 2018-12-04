@@ -2,6 +2,7 @@ package com.elchananalon.arkanoid;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
@@ -12,6 +13,14 @@ public class GameView extends View {
     private int canvasHeight;
     private Paint pen;
 
+    private Paddle paddle = new Paddle(180 ,40);
+    private Brick brick = new Brick(180,50,20,50, Color.RED);
+    private Brick brick2 = new Brick(180,50,410,50, Color.RED);
+    private Brick brick3 = new Brick(180,50,20,110, Color.RED);
+
+    private BrickCollection bricks = new BrickCollection(180,50,20,50, 20, Color.RED);
+
+
     public GameView(Context context,  AttributeSet attrs) {
         super(context, attrs);
 
@@ -20,13 +29,28 @@ public class GameView extends View {
         movingBall = new Ball(canvasWidth / 2.0f, canvasHeight / 2.0f, 50);
         movingBall.setDx(-7);
         movingBall.setDy(5);
+
+
+
     }
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         movingBall.draw(canvas);
         movingBall.move(canvasWidth, canvasHeight);
+        paddle.draw(canvas);
+        //brick.draw(canvas);
+        //brick2.draw(canvas);
+       // brick3.draw(canvas);
+        //paddle.move(1180,768,1);
+        bricks.draw(canvas);
+        movingBall.collideWith(paddle);
+        if (movingBall.collideWith(brick2))
+            System.out.println("HIT!");
+
         invalidate();
+
+
     }
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh)
