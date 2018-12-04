@@ -15,9 +15,10 @@ public class GameView extends View {
 
     private Paddle paddle = new Paddle(180 ,40);
     private Brick brick = new Brick(180,50,20,50, Color.RED);
-    private Brick brick2 = new Brick(180,50,410,50, Color.RED);
+    private Brick brick2 = new Brick(180,50,590,210, Color.RED);
     private Brick brick3 = new Brick(180,50,180+20+10,110, Color.RED);
     private Brick brick4 = new Brick(180,50,210+180+10,110, Color.RED);
+    private Brick brick5 = new Brick(180,50,410,510, Color.RED);
 
     private BrickCollection bricks = new BrickCollection(180,50,20,50, 10, Color.RED);
 
@@ -41,15 +42,18 @@ public class GameView extends View {
         movingBall.move(canvasWidth, canvasHeight);
         paddle.draw(canvas);
        //brick.draw(canvas);
-      //  brick2.draw(canvas);
+       brick2.draw(canvas);
        // brick3.draw(canvas);
-       // brick4.draw(canvas);
+        brick5.draw(canvas);
         //paddle.move(1180,768,1);
-       bricks.draw(canvas);
-
+       //bricks.draw(canvas);
+       if ( movingBall.collideWith(brick5) ||movingBall.collideWith(brick2) ) {
+           movingBall.setDx(-movingBall.getDx());
+           movingBall.setDy(-movingBall.getDy());
+       }
         movingBall.collideWith(paddle);
-        if (movingBall.collideWith(bricks.getBricks().get(23)))
-            System.out.println("HIT!");
+        //if (movingBall.collideWith(bricks.getBricks().get(23)))
+        //   System.out.println("HIT!");
 
         invalidate();
     }

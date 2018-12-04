@@ -129,10 +129,24 @@ public class Ball {
 
     public boolean collideWith(Brick brick)
     {
+        // full hit up or down
         if (this.xPosition+radius >= brick.getxPosition() && this.xPosition+radius <= brick.getxPosition()+brick.getWidth()){
             if (this.yPosition-radius <= brick.getyPosition()+brick.getHeight() && (this.yPosition+radius > brick.getyPosition())) {
-                dy = -dy; // NOT SURE IF THIS NEEDS TO BE HERE OR AT GAMEVIEW
-                return true; // HIT
+                return true;
+            }
+        }
+
+        // partly hit from left
+        if ((brick.getxPosition() >= this.xPosition-radius) && (brick.getxPosition() <= this.xPosition+radius  ) ){
+            if (this.yPosition-radius < brick.getyPosition()+brick.getHeight() && this.yPosition+radius > brick.getyPosition()) {
+                return true;
+            }
+        }
+
+        // partly hit from right
+        if (this.xPosition-radius <= brick.getxPosition()+brick.getWidth() && this.xPosition+radius >= brick.getxPosition()+brick.getWidth()) {
+            if (this.yPosition - radius <= brick.getyPosition() + brick.getHeight() && (this.yPosition + radius > brick.getyPosition())) {
+                return true;
             }
         }
         return false;
