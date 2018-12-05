@@ -14,15 +14,19 @@ public class GameView extends View {
     private enum State {GET_READY, PLAYING, GAME_OVER};
     // objects
     private Ball movingBall;
+    private int canvasWidth;
+    private int canvasHeight;
+    private Paint pen;
+
     private Paddle paddle = new Paddle(180 ,40);
     private Brick brick = new Brick(180,50,20,50, Color.RED);
-    private Brick brick2 = new Brick(180,50,410,50, Color.RED);
-    private Brick brick3 = new Brick(180,50,20,110, Color.RED);
+    private Brick brick2 = new Brick(180,50,720,350, Color.RED);
+    private Brick brick3 = new Brick(180,50,180+20+10,110, Color.RED);
+    private Brick brick4 = new Brick(180,50,210+180+10,110, Color.RED);
+    private Brick brick5 = new Brick(180,50,380,395, Color.RED);
     private BrickCollection bricks = new BrickCollection(180,50,20,50, 20, Color.RED);
 
     private float fx, fy;       // for finger touch location
-    private int canvasWidth;
-    private int canvasHeight;
     private Paint penMsg;
 
     // current state
@@ -56,12 +60,21 @@ public class GameView extends View {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         movingBall.draw(canvas);
-
+        movingBall.move(canvasWidth, canvasHeight);
         paddle.draw(canvas);
-        //brick.draw(canvas);
-        //brick2.draw(canvas);
-        // brick3.draw(canvas);
+       //brick.draw(canvas);
+       brick2.draw(canvas);
+       // brick3.draw(canvas);
+        brick5.draw(canvas);
         //paddle.move(1180,768,1);
+       //bricks.draw(canvas);
+       if ( movingBall.collideWith(brick5) ||movingBall.collideWith(brick2) ) {
+           movingBall.setDx(-movingBall.getDx());
+           movingBall.setDy(-movingBall.getDy());
+       }
+        movingBall.collideWith(paddle);
+        //if (movingBall.collideWith(bricks.getBricks().get(23)))
+        //   System.out.println("HIT!");
         bricks.draw(canvas);
 
         switch (state)
