@@ -16,18 +16,19 @@ public class GameView extends View {
     private Ball movingBall;
     private int canvasWidth;
     private int canvasHeight;
-    private Paint pen;
+    private int countLives, countScore;
+
 
     private Paddle paddle = new Paddle(180 ,40);
-    private Brick brick = new Brick(180,50,20,50, Color.RED);
+    //private Brick brick = new Brick(180,50,20,50, Color.RED);
     private Brick brick2 = new Brick(180,50,720,350, Color.RED);
-    private Brick brick3 = new Brick(180,50,180+20+10,110, Color.RED);
-    private Brick brick4 = new Brick(180,50,210+180+10,110, Color.RED);
+    //private Brick brick3 = new Brick(180,50,180+20+10,110, Color.RED);
+    //private Brick brick4 = new Brick(180,50,210+180+10,110, Color.RED);
     private Brick brick5 = new Brick(180,50,380,395, Color.RED);
-    private BrickCollection bricks = new BrickCollection(180,50,20,50, 20, Color.RED);
+    private BrickCollection bricks = new BrickCollection(180,50,20,105, 20, Color.RED);
 
     private float fx, fy;       // for finger touch location
-    private Paint penMsg;
+    private Paint penMsg , penInfo;
 
     // current state
     private State state;
@@ -37,6 +38,8 @@ public class GameView extends View {
 
     }
     private void initGame(){
+        countLives = 3;
+        countScore = 0;
         state = State.GET_READY;
         // initialize ball
         movingBall = new Ball(canvasWidth / 2.0f, canvasHeight-80, 50);
@@ -47,6 +50,10 @@ public class GameView extends View {
         paddle.setXPosition(canvasWidth / 2.0f);
         paddle.setYPosition(canvasHeight-45);
 
+        // paint for info text
+        penInfo = new Paint(Paint.ANTI_ALIAS_FLAG);
+        penInfo.setColor(Color.YELLOW);
+        penInfo.setTextSize(45);
         // paint for messages text
         penMsg = new Paint(Paint.ANTI_ALIAS_FLAG);
         penMsg.setTextAlign(Paint.Align.CENTER);
@@ -60,22 +67,24 @@ public class GameView extends View {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         movingBall.draw(canvas);
-        movingBall.move(canvasWidth, canvasHeight);
         paddle.draw(canvas);
        //brick.draw(canvas);
-       brick2.draw(canvas);
+      // brick2.draw(canvas);
        // brick3.draw(canvas);
-        brick5.draw(canvas);
+       // brick5.draw(canvas);
         //paddle.move(1180,768,1);
-       //bricks.draw(canvas);
-       if ( movingBall.collideWith(brick5) ||movingBall.collideWith(brick2) ) {
-           movingBall.setDx(-movingBall.getDx());
-           movingBall.setDy(-movingBall.getDy());
-       }
-        movingBall.collideWith(paddle);
-        //if (movingBall.collideWith(bricks.getBricks().get(23)))
-        //   System.out.println("HIT!");
         bricks.draw(canvas);
+        penInfo.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Lives: " + countLives, canvasWidth-50, 100, penInfo);
+        penInfo.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText("Score: " + countScore, 50, 100, penInfo);
+        for(int i =0 ; i<bricks.getBricks().size();i++) {
+            if (movingBall.collideWith(bricks.getBricks().get(i))) {
+                movingBall.setDx(-movingBall.getDx());
+                movingBall.setDy(-movingBall.getDy());
+            }
+        }
+        movingBall.collideWith(paddle);
 
         switch (state)
         {
@@ -90,8 +99,18 @@ public class GameView extends View {
 
                 // check collision
                 movingBall.collideWith(paddle);
-                if (movingBall.collideWith(brick2))
-                    System.out.println("HIT!");
+                for(int i =0 ; i<bricks.getBricks().size();i++){
+                    if (movingBall.collideWith(bricks.getBricks().get(i))) {
+                        System.out.println("HIT!");
+                        countScore += 5;
+                    }
+                }
+                if(movingBall.getyPosition() > paddle.getYPosition() && !movingBall.collideWith(paddle)){
+                    countLives--;
+                    if(countLives == 0){
+                        state = State.GAME_OVER;
+                    }
+                }
                 break;
 
             case GAME_OVER:
@@ -129,7 +148,7 @@ public class GameView extends View {
                 break;
 
             case MotionEvent.ACTION_MOVE:
-
+                //?? do we need it ??
                 break;
 
             case MotionEvent.ACTION_UP:

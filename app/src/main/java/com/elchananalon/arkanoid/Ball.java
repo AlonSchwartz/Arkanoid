@@ -94,7 +94,7 @@ public class Ball {
     public void move(int w, int h)
     {
         this.xPosition+= dx;
-       // this.yPosition+= -dy;
+        this.yPosition+= -dy;
 
         // check if ball out of left or right side
         if((xPosition-radius)<=0 || (xPosition+radius)>=w)
