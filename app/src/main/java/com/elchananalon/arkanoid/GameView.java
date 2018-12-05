@@ -26,7 +26,7 @@ public class GameView extends View {
     private Brick brick5 = new Brick(180,50,380,395, Color.RED);
     private BrickCollection bricks = new BrickCollection(180,50,20,50, 20, Color.RED);
 
-    private float fx, fy;       // for finger touch location
+    private float fx, fy; // for finger touch location
     private Paint penMsg;
 
     // current state
@@ -55,23 +55,25 @@ public class GameView extends View {
         penMsg.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         penMsg.setTextSize(55);
 
+
     }
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
+        //canvas.drawColor(Color.DKGRAY);
         movingBall.draw(canvas);
-        movingBall.move(canvasWidth, canvasHeight);
+       // movingBall.move(canvasWidth, canvasHeight);
         paddle.draw(canvas);
        //brick.draw(canvas);
-       brick2.draw(canvas);
+       //brick2.draw(canvas);
        // brick3.draw(canvas);
-        brick5.draw(canvas);
+        //brick5.draw(canvas);
         //paddle.move(1180,768,1);
        //bricks.draw(canvas);
-       if ( movingBall.collideWith(brick5) ||movingBall.collideWith(brick2) ) {
-           movingBall.setDx(-movingBall.getDx());
-           movingBall.setDy(-movingBall.getDy());
-       }
+      // if ( movingBall.collideWith(brick5) ||movingBall.collideWith(brick2) ) {
+        //   movingBall.setDx(-movingBall.getDx());
+          // movingBall.setDy(-movingBall.getDy());
+       //}
         movingBall.collideWith(paddle);
         //if (movingBall.collideWith(bricks.getBricks().get(23)))
         //   System.out.println("HIT!");
