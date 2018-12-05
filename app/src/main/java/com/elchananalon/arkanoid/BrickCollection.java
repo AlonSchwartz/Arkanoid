@@ -10,6 +10,14 @@ public class BrickCollection {
     private static final int ROWS = 5, COLS= 5;
     private ArrayList<Brick> bricks;
 
+    public static int getROWS() {
+        return ROWS;
+    }
+
+    public static int getCOLS() {
+        return COLS;
+    }
+
     // Constructor. Will build a set of bricks at width X height size, with padding between them
     public BrickCollection(float width, float height, float startingXPosition, float startingYPosition, float padding, int color) {
 
