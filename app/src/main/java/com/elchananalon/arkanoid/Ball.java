@@ -93,8 +93,8 @@ public class Ball {
     }
     public void move(int w, int h)
     {
-        //this.xPosition+= dx;
-        this.yPosition+= -dy;
+        this.xPosition+= dx;
+       // this.yPosition+= -dy;
 
         // check if ball out of left or right side
         if((xPosition-radius)<=0 || (xPosition+radius)>=w)
@@ -129,26 +129,27 @@ public class Ball {
 
     public boolean collideWith(Brick brick)
     {
-        // full hit up or down
+        // FULL hit up or down
         if (this.xPosition+radius >= brick.getxPosition() && this.xPosition+radius <= brick.getxPosition()+brick.getWidth()){
             if (this.yPosition-radius <= brick.getyPosition()+brick.getHeight() && (this.yPosition+radius > brick.getyPosition())) {
                 return true;
             }
         }
 
-        // partly hit from left
+        // PARTLY hit from left up or down, including from the side
         if ((brick.getxPosition() >= this.xPosition-radius) && (brick.getxPosition() <= this.xPosition+radius  ) ){
             if (this.yPosition-radius < brick.getyPosition()+brick.getHeight() && this.yPosition+radius > brick.getyPosition()) {
                 return true;
             }
         }
 
-        // partly hit from right
+        // PARTLY hit from right up or down, including from the side
         if (this.xPosition-radius <= brick.getxPosition()+brick.getWidth() && this.xPosition+radius >= brick.getxPosition()+brick.getWidth()) {
             if (this.yPosition - radius <= brick.getyPosition() + brick.getHeight() && (this.yPosition + radius > brick.getyPosition())) {
                 return true;
             }
         }
+
         return false;
     }
 
