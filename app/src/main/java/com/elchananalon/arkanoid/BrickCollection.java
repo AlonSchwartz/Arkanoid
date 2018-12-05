@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class BrickCollection {
 
-    private static final int ROWS = 5, COLS= 5;
+    private static final int ROWS = 15, COLS= 5;
     private ArrayList<Brick> bricks;
 
     public static int getROWS() {

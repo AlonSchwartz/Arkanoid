@@ -103,10 +103,7 @@ public class GameView extends View {
                         movingBall.setDx(-movingBall.getDx());
                         movingBall.setDy(-movingBall.getDy());
                         bricks.remove(i);
-                        if(countScore == 0)
-                            countScore += 5;
-                        else
-                            countScore*=5;
+                            countScore+=5*countLives;
                     }
                 }
                 // paddle misses the ball
