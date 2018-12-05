@@ -36,8 +36,12 @@ public class GameView extends View {
         countScore = 0;
 
         initCanvas();
+        float padding = canvasWidth*((float) 5/1000);// 0.5% of screen width
+        float col = BrickCollection.getCOLS();
+        float row = BrickCollection.getROWS();
         // init brick collection
-        bricks = new BrickCollection(180,50,20,105, 20, Color.RED);
+        bricks = new BrickCollection((canvasWidth/col)-padding, ((canvasHeight/(float)2)/row) - padding,20,105, padding, Color.RED);
+
 
         // paint for info text
         penInfo = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -62,8 +66,8 @@ public class GameView extends View {
         movingBall.setDx(-7);
         movingBall.setDy(5);
         // Initialize paddle
-        paddle = new Paddle(180 ,40);
-        paddle.setXPosition(canvasWidth / 2.0f);
+        paddle = new Paddle(180 ,20);
+        paddle.setXPosition((canvasWidth / 2.0f)-(paddle.getWidth())/2);
         paddle.setYPosition(canvasHeight-45);
     }
 
@@ -91,7 +95,7 @@ public class GameView extends View {
 
                 // move the movingBall
                 movingBall.move(canvasWidth, canvasHeight);
-                // check collision
+                // check bricks and paddle collision with the ball
                 movingBall.collideWith(paddle);
                 for(int i =0 ; i<bricks.getBricks().size();i++){
                     if (movingBall.collideWith(bricks.getBricks().get(i))) {
@@ -99,18 +103,25 @@ public class GameView extends View {
                         movingBall.setDx(-movingBall.getDx());
                         movingBall.setDy(-movingBall.getDy());
                         bricks.remove(i);
-                        countScore += 5;
+                        if(countScore == 0)
+                            countScore += 5;
+                        else
+                            countScore*=5;
                     }
                 }
+                // paddle misses the ball
                 if(movingBall.getyPosition() > paddle.getYPosition() && !movingBall.collideWith(paddle)){
                     countLives--;
                     if(countLives == 0){
                         state = State.GAME_OVER;
                     }
-                    else{
+                    else{// restar paddle and ball
                         initCanvas();
                     }
                 }
+                ///all bricks removed
+                if(bricks.getBricks().size() == 0)
+                    state = State.GAME_OVER;
                 break;
 
             case GAME_OVER:
