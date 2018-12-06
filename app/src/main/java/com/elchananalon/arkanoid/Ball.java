@@ -123,8 +123,13 @@ public class Ball {
                 dy = -dy;
                 return true;
             }
+
+            // we can add hitLocation. up = 0, right = 1, left = 2. to do get methods for them and to check in gameView for collideWith paddle+getHitLocation = 1/2/3
+            // and then change the direction of the ball accordingly
         }
         return false;
+
+
     }
 
     public boolean collideWith(Brick brick)

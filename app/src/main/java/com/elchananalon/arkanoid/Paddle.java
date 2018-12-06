@@ -7,9 +7,10 @@ import android.graphics.Paint;
 public class Paddle {
 
     private float width, height, xPosition, yPosition;
-    private static final float xStartingPosition=500, yStartingPosition=650, RIGHT=0, LEFT=1;
+    private static final float xStartingPosition=500, yStartingPosition=650;
+    private static final int RIGHT=0, LEFT=1, STARTING_SPEED = 10;
     private Paint pen;
-    private int color = Color.BLUE, speed = 5;
+    private int color = Color.BLUE, speed;
 
 
     // Constructor
@@ -19,6 +20,7 @@ public class Paddle {
         this.xPosition = xStartingPosition;
         this.yPosition = yStartingPosition;
         this.pen = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.speed = STARTING_SPEED;
 
 
     }
@@ -62,6 +64,8 @@ public class Paddle {
 
     public void setSpeed(int speed) {this.speed = speed; }
 
+    public static int getStartingSpeed() { return STARTING_SPEED; }
+
     /**********************************************************/
 
     public void draw(Canvas canvas){
@@ -81,12 +85,12 @@ public class Paddle {
     public void move(int w, int h, int direction){
 
         //Move to left
-        if (xPosition+width >= width && direction == LEFT)
+        if (xPosition+width > width && direction == LEFT)
         {
-            xPosition -= speed;
+            xPosition -= speed ;
         }
         //Move to right
-        if (xPosition+width < w && direction == RIGHT)
+        if (xPosition+width < w-5 && direction == RIGHT)
         {
             xPosition += speed;
         }

@@ -26,6 +26,8 @@ public class GameView extends View {
     // current state
     private State state;
 
+    private boolean paddleMoving = false;
+
     public GameView(Context context,  AttributeSet attrs) {
         super(context, attrs);
 
@@ -62,7 +64,7 @@ public class GameView extends View {
     {
         state = State.GET_READY;
         // initialize ball
-        movingBall = new Ball(canvasWidth / 2.0f, canvasHeight-80, 50);
+        movingBall = new Ball(canvasWidth /2.0f, canvasHeight-80, 50);
         movingBall.setDx(-7);
         movingBall.setDy(5);
         // Initialize paddle
@@ -92,15 +94,27 @@ public class GameView extends View {
                 break;
 
             case PLAYING:
+                if(state == State.PLAYING)
+                {
+                    if(fx > canvasWidth/2 )
+                        paddle.move(canvasWidth,canvasHeight,0);
+                    else if(fx <= canvasWidth/2)
+                        paddle.move(canvasWidth,canvasHeight,1);
+                }
 
                 // move the movingBall
                 movingBall.move(canvasWidth, canvasHeight);
                 // check bricks and paddle collision with the ball
-                movingBall.collideWith(paddle);
+                if (movingBall.collideWith(paddle)){
+                   // movingBall.setDy(-(movingBall.getDy()));
+                    //movingBall.setDx(-(movingBall.getDx()));
+
+                }
+
                 for(int i =0 ; i<bricks.getBricks().size();i++){
                     if (movingBall.collideWith(bricks.getBricks().get(i))) {
                         // the following logic should be adjusted
-                        movingBall.setDx(-movingBall.getDx());
+                       // movingBall.setDx(-movingBall.getDx());
                         movingBall.setDy(-movingBall.getDy());
                         bricks.remove(i);
                             countScore+=5*countLives;
@@ -112,7 +126,7 @@ public class GameView extends View {
                     if(countLives == 0){
                         state = State.GAME_OVER;
                     }
-                    else{// restar paddle and ball
+                    else{// restart paddle and ball
                         initCanvas();
                     }
                 }
@@ -142,6 +156,7 @@ public class GameView extends View {
         fx = event.getX();
         fy = event.getY();
 
+
         if (event.getAction() == MotionEvent.ACTION_DOWN){
                 if(state == State.GET_READY)
                     state = State.PLAYING;
@@ -149,11 +164,8 @@ public class GameView extends View {
                 {
                     if(state == State.PLAYING)
                     {
-                        if(fx > canvasWidth/2 )
-                            paddle.move(canvasWidth,canvasHeight,0);
-                        else if(fx <= canvasWidth/2)
-                            paddle.move(canvasWidth,canvasHeight,1);
-
+                        paddle.setSpeed(paddle.getStartingSpeed());
+                        paddleMoving = true;
                     }
                     else
                     {
@@ -161,8 +173,10 @@ public class GameView extends View {
                     }
                 }
         }
-        invalidate();
-
+         if ( event.getAction() == MotionEvent.ACTION_UP) {
+            paddleMoving = false;
+            paddle.setSpeed(0);
+            }
         return true;
     }
 
