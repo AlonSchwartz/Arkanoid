@@ -69,9 +69,9 @@ public class GameView extends View {
     {
         state = State.GET_READY;
         // initialize ball
-        movingBall = new Ball(canvasWidth /2, canvasHeight-85, 50);
-        movingBall.setDx(1); // was -7
-        movingBall.setDy(1); // was 5
+        movingBall = new Ball(canvasWidth /2, canvasHeight-80, 50);
+        movingBall.setDx(-7); // was -7
+        movingBall.setDy(5); // was 5
         // Initialize paddle
         paddle = new Paddle(180 ,20);
         paddle.setXPosition((canvasWidth / 2.0f)-(paddle.getWidth())/2);
@@ -116,12 +116,12 @@ public class GameView extends View {
                 movingBall.move(canvasWidth, canvasHeight);
                 // check bricks and paddle collision with the ball
                 if (movingBall.collideWith(paddle)){
-                   // movingBall.setDy(-(movingBall.getDy()));
-                   // movingBall.setDx(-(movingBall.getDx()));
+                   movingBall.setDy(-(movingBall.getDy()));
+                    movingBall.setDx(-(movingBall.getDx()));
 
                     // just from checking...
-                    movingBall.setDy(0);
-                    movingBall.setDx(0);
+                    //movingBall.setDy(0);
+                    //movingBall.setDx(0);
 
                 }
 

@@ -8,7 +8,7 @@ public class Paddle {
 
     private float width, height, xPosition, yPosition;
     private static final float xStartingPosition=500, yStartingPosition=650;
-    private static final int RIGHT=0, LEFT=1, STARTING_SPEED = 5;
+    private static final int RIGHT=0, LEFT=1, STARTING_SPEED = 10;
     private Paint pen;
     private int color = Color.BLUE, speed;
 
