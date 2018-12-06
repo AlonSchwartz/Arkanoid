@@ -5,11 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class GameView extends View {
+    private MediaPlayer mediaPlayer;
     // states
     private enum State {GET_READY, PLAYING, GAME_OVER};
     // objects
@@ -26,10 +29,11 @@ public class GameView extends View {
     // current state
     private State state;
 
-    private boolean paddleMoving = false;
 
     public GameView(Context context,  AttributeSet attrs) {
         super(context, attrs);
+        // brick breacking effect setup
+        mediaPlayer = MediaPlayer.create(context , R.raw.concrete_break);
 
     }
     private void initGame(){
@@ -42,7 +46,7 @@ public class GameView extends View {
         float col = BrickCollection.getCOLS();
         float row = BrickCollection.getROWS();
         // init brick collection
-        bricks = new BrickCollection((canvasWidth/col)-padding, ((canvasHeight/(float)2)/row) - padding,20,105, padding, Color.RED);
+        bricks = new BrickCollection((canvasWidth/col)-padding, ((canvasHeight/(float)2)/row) - padding,20,105, padding);
 
 
         // paint for info text
@@ -76,6 +80,10 @@ public class GameView extends View {
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
+        Drawable d = getResources().getDrawable(R.drawable.brick);
+        //getDrawable(int drawable,Theme null) is better, does'nt match API 15
+        d.setBounds(0, 0, canvasWidth, canvasHeight);
+        d.draw(canvas);
         // draw objects on canvas
         movingBall.draw(canvas);
         paddle.draw(canvas);
@@ -106,7 +114,7 @@ public class GameView extends View {
                 movingBall.move(canvasWidth, canvasHeight);
                 // check bricks and paddle collision with the ball
                 if (movingBall.collideWith(paddle)){
-                   // movingBall.setDy(-(movingBall.getDy()));
+                    movingBall.setDy(-(movingBall.getDy()));
                     //movingBall.setDx(-(movingBall.getDx()));
 
                 }
@@ -117,9 +125,11 @@ public class GameView extends View {
                        // movingBall.setDx(-movingBall.getDx());
                         movingBall.setDy(-movingBall.getDy());
                         bricks.remove(i);
-                            countScore+=5*countLives;
+                        mediaPlayer.start();//doesnt work?
+                        countScore+=5*countLives;
                     }
                 }
+                //mediaPlayer.stop();
                 // paddle misses the ball
                 if(movingBall.getyPosition() > paddle.getYPosition() && !movingBall.collideWith(paddle)){
                     countLives--;
@@ -138,7 +148,7 @@ public class GameView extends View {
             case GAME_OVER:
                 if(bricks.getBricks().size() == 0){//WINN
                     canvas.drawText("WELL DONE! - You Win ", canvasWidth/2, canvasHeight/2, penMsg);
-                    canvas.drawText(" please touch the screen to start new game", canvasWidth/2, canvasHeight/2 + penMsg.getTextSize()+5, penMsg);
+                    canvas.drawText("Touch the screen to start new game", canvasWidth/2, canvasHeight/2 + penMsg.getTextSize()+5, penMsg);
                 }
                 else{//loss
                     canvas.drawText("GAME OVER - You Loss!", canvasWidth/2, canvasHeight/2, penMsg);
@@ -165,7 +175,6 @@ public class GameView extends View {
                     if(state == State.PLAYING)
                     {
                         paddle.setSpeed(paddle.getStartingSpeed());
-                        paddleMoving = true;
                     }
                     else
                     {
@@ -174,7 +183,6 @@ public class GameView extends View {
                 }
         }
          if ( event.getAction() == MotionEvent.ACTION_UP) {
-            paddleMoving = false;
             paddle.setSpeed(0);
             }
         return true;

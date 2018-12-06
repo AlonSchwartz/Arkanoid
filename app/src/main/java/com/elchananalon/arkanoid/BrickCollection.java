@@ -4,10 +4,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BrickCollection {
 
-    private static final int ROWS = 15, COLS= 5;
+    private static final int ROWS = 5, COLS= 5;
     private ArrayList<Brick> bricks;
 
     public static int getROWS() {
@@ -19,7 +20,7 @@ public class BrickCollection {
     }
 
     // Constructor. Will build a set of bricks at width X height size, with padding between them
-    public BrickCollection(float width, float height, float startingXPosition, float startingYPosition, float padding, int color) {
+    public BrickCollection(float width, float height, float startingXPosition, float startingYPosition, float padding) {
 
         bricks = new ArrayList<>();
 
@@ -32,11 +33,11 @@ public class BrickCollection {
         for (int j = 0; j < ROWS; j++) {
             for (int i = 0; i < COLS; i++) {
                 if (i == 0) {
-                    bricks.add(new Brick(width, height, startingXPosition, startingYPosition, color));
+                    bricks.add(new Brick(width, height, startingXPosition, startingYPosition, setBrickColor()));
                     shiftRight = padding + width; // We need to shift right from the first brick only
                 }
                 else{
-                    bricks.add(new Brick(width, height, prevX + shiftRight, startingYPosition, color));
+                    bricks.add(new Brick(width, height, prevX + shiftRight, startingYPosition, setBrickColor()));
                 }
                 prevX = bricks.get(i).getxPosition();
             }
@@ -60,6 +61,18 @@ public class BrickCollection {
 
     public void remove(int i){
         bricks.remove(i);
+    }
+
+    private int setBrickColor(){
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.rgb(27,18,88));
+        colors.add(Color.rgb(84,16,16));
+        colors.add(Color.rgb(50,87,53));
+        colors.add(Color.rgb(124,47,38));
+        colors.add(Color.rgb(84,16,16));
+        colors.add(Color.rgb(172,163,33));
+        Random rand = new Random();
+        return colors.get(rand.nextInt(colors.size()));
     }
 }
 

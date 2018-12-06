@@ -19,7 +19,7 @@ public class Ball {
         this.dx = 0;
         this.dy = 0;
         this.pen = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.color = Color.WHITE;
+        this.color = Color.BLACK;
         this.radius = 20;
     }
 
@@ -120,7 +120,7 @@ public class Ball {
             if ((this.yPosition+this.radius >= paddle.getYPosition()) && (this.yPosition + this.radius<=paddle.getYPosition()+paddle.getHeight()))
             {
                 // HIT! Change the ball direction
-                dy = -dy;
+                //dy = -dy;
                 return true;
             }
 
