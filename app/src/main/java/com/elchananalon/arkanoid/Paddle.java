@@ -8,7 +8,7 @@ public class Paddle {
 
     private float width, height, xPosition, yPosition;
     private static final float xStartingPosition=500, yStartingPosition=650;
-    private static final int RIGHT=0, LEFT=1, STARTING_SPEED = 10;
+    private static final int RIGHT=0, LEFT=1, STARTING_SPEED = 5;
     private Paint pen;
     private int color = Color.BLUE, speed;
 
@@ -20,7 +20,7 @@ public class Paddle {
         this.xPosition = xStartingPosition;
         this.yPosition = yStartingPosition;
         this.pen = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.speed = STARTING_SPEED;
+        this.speed = 0;
 
 
     }

@@ -15,7 +15,7 @@ public class GameView extends View {
     //private MediaPlayer mediaPlayer;
     private SoundPlayer sound;
     // states
-    private enum State {GET_READY, PLAYING, GAME_OVER};
+    private enum State {GET_READY, PLAYING, GAME_OVER}
     // objects
     private Ball movingBall;
     private int canvasWidth;
@@ -47,13 +47,13 @@ public class GameView extends View {
         float col = BrickCollection.getCOLS();
         float row = BrickCollection.getROWS();
         // init brick collection
-        bricks = new BrickCollection((canvasWidth/col)-padding, ((canvasHeight/(float)2)/row) - padding,20,105, padding);
+        bricks = new BrickCollection((canvasWidth/col)-padding, ((canvasHeight/(float)2)/row) - padding,padding/2,canvasWidth/12, padding);
 
 
         // paint for info text
         penInfo = new Paint(Paint.ANTI_ALIAS_FLAG);
         penInfo.setColor(Color.YELLOW);
-        penInfo.setTextSize(45);
+        penInfo.setTextSize(55);
 
         // paint for messages text
         penMsg = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -69,13 +69,14 @@ public class GameView extends View {
     {
         state = State.GET_READY;
         // initialize ball
-        movingBall = new Ball(canvasWidth /2.0f, canvasHeight-80, 50);
-        movingBall.setDx(-7);
-        movingBall.setDy(5);
+        movingBall = new Ball(canvasWidth /2, canvasHeight-85, 50);
+        movingBall.setDx(1); // was -7
+        movingBall.setDy(1); // was 5
         // Initialize paddle
         paddle = new Paddle(180 ,20);
         paddle.setXPosition((canvasWidth / 2.0f)-(paddle.getWidth())/2);
         paddle.setYPosition(canvasHeight-45);
+
     }
 
     @Override
@@ -94,7 +95,6 @@ public class GameView extends View {
         canvas.drawText("Lives: " + countLives, canvasWidth-50, 100, penInfo);
         penInfo.setTextAlign(Paint.Align.LEFT);
         canvas.drawText("Score: " + countScore, 50, 100, penInfo);
-
 
 
         switch (state)
@@ -116,12 +116,16 @@ public class GameView extends View {
                 movingBall.move(canvasWidth, canvasHeight);
                 // check bricks and paddle collision with the ball
                 if (movingBall.collideWith(paddle)){
-                    movingBall.setDy(-(movingBall.getDy()));
-                    //movingBall.setDx(-(movingBall.getDx()));
+                   // movingBall.setDy(-(movingBall.getDy()));
+                   // movingBall.setDx(-(movingBall.getDx()));
+
+                    // just from checking...
+                    movingBall.setDy(0);
+                    movingBall.setDx(0);
 
                 }
 
-                for(int i =0 ; i<bricks.getBricks().size();i++){
+                    for(int i =0 ; i<bricks.getBricks().size();i++){
                     if (movingBall.collideWith(bricks.getBricks().get(i))) {
                         // the following logic should be adjusted
                        // movingBall.setDx(-movingBall.getDx());
@@ -149,7 +153,6 @@ public class GameView extends View {
                 break;
 
             case GAME_OVER:
-                sound.releaseSP();
                 if(bricks.getBricks().size() == 0){//WINN
                     canvas.drawText("WELL DONE! - You Win ", canvasWidth/2, canvasHeight/2, penMsg);
                     canvas.drawText("Touch the screen to start new game", canvasWidth/2, canvasHeight/2 + penMsg.getTextSize()+5, penMsg);
