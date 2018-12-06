@@ -12,7 +12,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class GameView extends View {
-    private MediaPlayer mediaPlayer;
+    //private MediaPlayer mediaPlayer;
+    private SoundPlayer sound;
     // states
     private enum State {GET_READY, PLAYING, GAME_OVER};
     // objects
@@ -33,7 +34,8 @@ public class GameView extends View {
     public GameView(Context context,  AttributeSet attrs) {
         super(context, attrs);
         // brick breacking effect setup
-        mediaPlayer = MediaPlayer.create(context , R.raw.concrete_break);
+        //mediaPlayer = MediaPlayer.create(context , R.raw.concrete_break);
+        sound = new SoundPlayer(getContext());
 
     }
     private void initGame(){
@@ -80,6 +82,7 @@ public class GameView extends View {
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
+
         Drawable d = getResources().getDrawable(R.drawable.brick);
         //getDrawable(int drawable,Theme null) is better, does'nt match API 15
         d.setBounds(0, 0, canvasWidth, canvasHeight);
@@ -125,7 +128,8 @@ public class GameView extends View {
                        // movingBall.setDx(-movingBall.getDx());
                         movingBall.setDy(-movingBall.getDy());
                         bricks.remove(i);
-                        mediaPlayer.start();//doesnt work?
+                        sound.playSound();
+                        //mediaPlayer.start();//doesnt work?
                         countScore+=5*countLives;
                     }
                 }
