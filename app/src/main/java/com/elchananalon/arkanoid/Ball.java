@@ -93,8 +93,8 @@ public class Ball {
     }
     public void move(int w, int h)
     {
-        this.xPosition+= dx;
-        this.yPosition+= -dy;
+       this.xPosition+= dx;
+      this.yPosition+= -dy;
 
         // check if ball out of left or right side
         if((xPosition-radius)<=0 || (xPosition+radius)>=w)
@@ -113,7 +113,19 @@ public class Ball {
 
     public boolean collideWith(Paddle paddle)
     {
+        if ((paddle.getXPosition() <= this.xPosition-radius) && (paddle.getXPosition()+paddle.getWidth() > this.xPosition+radius))
+        {
+            if ((this.yPosition+radius == paddle.getYPosition()) && this.yPosition-radius < paddle.getYPosition())
+            {
+                System.out.println("HIT FROM UP");
+                //dx=-dx;
+                //dy=-dy;
+                return true;
+            }
+        }
+
         // If the x position of the ball is between the paddle x boundaries
+        /*
         if ((this.xPosition+this.radius >= paddle.getXPosition()) && (this.xPosition+this.radius <= paddle.getXPosition()+paddle.getWidth()) )
         {
             // and also y position of the ball is touching the paddle
@@ -121,11 +133,40 @@ public class Ball {
             {
                 // HIT! Change the ball direction
                 //dy = -dy;
+                System.out.println("if 0");
+
                 return true;
             }
 
+
             // we can add hitLocation. up = 0, right = 1, left = 2. to do get methods for them and to check in gameView for collideWith paddle+getHitLocation = 1/2/3
             // and then change the direction of the ball accordingly
+        }*/
+
+        // If there is a hit on the right side of the paddle
+        if (this.xPosition-radius <= paddle.getXPosition()+paddle.getWidth() && this.xPosition+radius > paddle.getXPosition()+paddle.getWidth())
+        {
+            if (this.yPosition+radius >= paddle.getYPosition() && this.yPosition-radius < paddle.getYPosition())
+            {
+                System.out.println("HIT FROM RIGHT");
+
+                //dx = -dx;
+               // dy=-dy;
+                return true;
+            }
+        }
+
+        // If there is a hit on the left side of the paddle
+        if (this.xPosition+radius >= paddle.getXPosition() && this.xPosition-radius < paddle.getXPosition())
+        {
+           if (this.yPosition+radius >= paddle.getYPosition() && this.yPosition-radius < paddle.getYPosition())
+            {
+                System.out.println("HIT FROM LEFT");
+
+                // dx = -dx;
+               // dy=-dy;
+                return true;
+            }
         }
         return false;
 

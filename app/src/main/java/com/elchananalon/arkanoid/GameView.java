@@ -51,7 +51,7 @@ public class GameView extends View {
             adjustHeight = (canvasHeight/2.0f);
         }
         // init brick collection
-        bricks = new BrickCollection((canvasWidth/col)-padding, (adjustHeight/row) - padding,padding,canvasHeight*(7.0f/100.0f)+padding, padding);
+        bricks = new BrickCollection((canvasWidth/col)-padding, (adjustHeight/row) - padding,padding/2,canvasHeight*(7.0f/100.0f)+padding, padding);
 
 
         // paint for info text
@@ -122,12 +122,16 @@ public class GameView extends View {
                 movingBall.move(canvasWidth, canvasHeight);
                 // check bricks and paddle collision with the ball
                 if (movingBall.collideWith(paddle)){
-                    movingBall.setDy(-(movingBall.getDy()));
-                    //movingBall.setDx(-(movingBall.getDx()));
+                   movingBall.setDy(-(movingBall.getDy()));
+                    movingBall.setDx(-(movingBall.getDx()));
+
+                    // just from checking...
+                    //movingBall.setDy(0);
+                    //movingBall.setDx(0);
 
                 }
 
-                for(int i =0 ; i<bricks.getBricks().size();i++){
+                    for(int i =0 ; i<bricks.getBricks().size();i++){
                     if (movingBall.collideWith(bricks.getBricks().get(i))) {
                         // the following logic should be adjusted
                        // movingBall.setDx(-movingBall.getDx());
@@ -155,7 +159,6 @@ public class GameView extends View {
                 break;
 
             case GAME_OVER:
-                //sound.releaseSP();
                 if(bricks.getBricks().size() == 0){//WINN
                     canvas.drawText("WELL DONE! - You Win ", canvasWidth/2, canvasHeight/2, penMsg);
                     canvas.drawText("Touch the screen to start new game", canvasWidth/2, canvasHeight/2 + penMsg.getTextSize()+5, penMsg);

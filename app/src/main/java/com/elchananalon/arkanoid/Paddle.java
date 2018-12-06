@@ -20,7 +20,7 @@ public class Paddle {
         this.xPosition = xStartingPosition;
         this.yPosition = yStartingPosition;
         this.pen = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.speed = STARTING_SPEED;
+        this.speed = 0;
 
 
     }
