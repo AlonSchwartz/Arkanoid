@@ -17,4 +17,7 @@ public class SoundPlayer {
         System.out.println("Sound played");
         sound.play(hitSound,1.0f,1.0f,1,0,1.0f);//play sound
     }
+    public void releaseSP(){
+        sound.release();
+    }
 }

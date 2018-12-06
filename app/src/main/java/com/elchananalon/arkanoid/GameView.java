@@ -33,8 +33,7 @@ public class GameView extends View {
 
     public GameView(Context context,  AttributeSet attrs) {
         super(context, attrs);
-        // brick breacking effect setup
-        //mediaPlayer = MediaPlayer.create(context , R.raw.concrete_break);
+        // brick breaking effect setup
         sound = new SoundPlayer(getContext());
 
     }
@@ -129,11 +128,11 @@ public class GameView extends View {
                         movingBall.setDy(-movingBall.getDy());
                         bricks.remove(i);
                         sound.playSound();
-                        //mediaPlayer.start();//doesnt work?
+
                         countScore+=5*countLives;
                     }
                 }
-                //mediaPlayer.stop();
+
                 // paddle misses the ball
                 if(movingBall.getyPosition() > paddle.getYPosition() && !movingBall.collideWith(paddle)){
                     countLives--;
@@ -150,6 +149,7 @@ public class GameView extends View {
                 break;
 
             case GAME_OVER:
+                sound.releaseSP();
                 if(bricks.getBricks().size() == 0){//WINN
                     canvas.drawText("WELL DONE! - You Win ", canvasWidth/2, canvasHeight/2, penMsg);
                     canvas.drawText("Touch the screen to start new game", canvasWidth/2, canvasHeight/2 + penMsg.getTextSize()+5, penMsg);
