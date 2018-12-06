@@ -46,8 +46,12 @@ public class GameView extends View {
         float padding = canvasWidth*((float) 5/1000);// 0.5% of screen width
         float col = BrickCollection.getCOLS();
         float row = BrickCollection.getROWS();
+        float adjustHeight = (canvasHeight/3.0f);
+        if(row > 6){
+            adjustHeight = (canvasHeight/2.0f);
+        }
         // init brick collection
-        bricks = new BrickCollection((canvasWidth/col)-padding, ((canvasHeight/(float)2)/row) - padding,20,105, padding);
+        bricks = new BrickCollection((canvasWidth/col)-padding, (adjustHeight/row) - padding,padding,canvasHeight*(7.0f/100.0f)+padding, padding);
 
 
         // paint for info text
@@ -73,15 +77,17 @@ public class GameView extends View {
         movingBall.setDx(-7);
         movingBall.setDy(5);
         // Initialize paddle
-        paddle = new Paddle(180 ,20);
-        paddle.setXPosition((canvasWidth / 2.0f)-(paddle.getWidth())/2);
+        float paddleWidth = canvasWidth*(15.0f/100.0f);// 15%
+        float paddleHeight = canvasHeight*(3.0f/100.0f);// 3%
+        paddle = new Paddle(paddleWidth ,paddleHeight);
+        paddle.setXPosition((canvasWidth / 2.0f)-(paddle.getWidth())/2.0f);
         paddle.setYPosition(canvasHeight-45);
     }
 
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-
+        // Background init
         Drawable d = getResources().getDrawable(R.drawable.brick);
         //getDrawable(int drawable,Theme null) is better, does'nt match API 15
         d.setBounds(0, 0, canvasWidth, canvasHeight);
@@ -91,9 +97,9 @@ public class GameView extends View {
         paddle.draw(canvas);
         bricks.draw(canvas);
         penInfo.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("Lives: " + countLives, canvasWidth-50, 100, penInfo);
+        canvas.drawText("Lives: " + countLives, canvasWidth-50, canvasHeight*(7.0f/100.0f), penInfo); //y axis 7%
         penInfo.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("Score: " + countScore, 50, 100, penInfo);
+        canvas.drawText("Score: " + countScore, 50, canvasHeight*(7.0f/100.0f), penInfo); //y axis 7%
 
 
 
@@ -149,7 +155,7 @@ public class GameView extends View {
                 break;
 
             case GAME_OVER:
-                sound.releaseSP();
+                //sound.releaseSP();
                 if(bricks.getBricks().size() == 0){//WINN
                     canvas.drawText("WELL DONE! - You Win ", canvasWidth/2, canvasHeight/2, penMsg);
                     canvas.drawText("Touch the screen to start new game", canvasWidth/2, canvasHeight/2 + penMsg.getTextSize()+5, penMsg);
