@@ -33,14 +33,15 @@ public class GameView extends View {
 
     public GameView(Context context,  AttributeSet attrs) {
         super(context, attrs);
-        // brick breaking effect setup
-        sound = new SoundPlayer(getContext());
 
     }
     private void initGame(){
         // init score and lives
         countLives = 3;
         countScore = 0;
+
+        // brick breaking effect setup
+        sound = new SoundPlayer(getContext());
 
         initCanvas();
         float padding = canvasWidth*((float) 5/1000);// 0.5% of screen width
@@ -56,8 +57,10 @@ public class GameView extends View {
 
         // paint for info text
         penInfo = new Paint(Paint.ANTI_ALIAS_FLAG);
-        penInfo.setColor(Color.YELLOW);
+        penInfo.setColor(Color.BLACK);
         penInfo.setTextSize(45);
+        penInfo.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+
 
         // paint for messages text
         penMsg = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -73,14 +76,14 @@ public class GameView extends View {
     {
         state = State.GET_READY;
         // initialize ball
-        movingBall = new Ball(canvasWidth /2.0f, canvasHeight-80, 50);
+        movingBall = new Ball(canvasWidth /2.0f-100, canvasHeight-80, 50);
         movingBall.setDx(-7);
         movingBall.setDy(5);
         // Initialize paddle
         float paddleWidth = canvasWidth*(15.0f/100.0f);// 15%
         float paddleHeight = canvasHeight*(3.0f/100.0f);// 3%
         paddle = new Paddle(paddleWidth ,paddleHeight);
-        paddle.setXPosition((canvasWidth / 2.0f)-(paddle.getWidth())/2.0f);
+        paddle.setXPosition((canvasWidth / 2)-(paddle.getWidth())/2.0f);
         paddle.setYPosition(canvasHeight-45);
     }
 
@@ -110,6 +113,7 @@ public class GameView extends View {
                 break;
 
             case PLAYING:
+
                 if(state == State.PLAYING)
                 {
                     if(fx > canvasWidth/2 )
@@ -122,8 +126,8 @@ public class GameView extends View {
                 movingBall.move(canvasWidth, canvasHeight);
                 // check bricks and paddle collision with the ball
                 if (movingBall.collideWith(paddle)){
-                   movingBall.setDy(-(movingBall.getDy()));
-                    movingBall.setDx(-(movingBall.getDx()));
+                  // movingBall.setDy(-(movingBall.getDy()));
+                    //movingBall.setDx(-(movingBall.getDx()));
 
                     // just from checking...
                     //movingBall.setDy(0);
@@ -135,7 +139,7 @@ public class GameView extends View {
                     if (movingBall.collideWith(bricks.getBricks().get(i))) {
                         // the following logic should be adjusted
                        // movingBall.setDx(-movingBall.getDx());
-                        movingBall.setDy(-movingBall.getDy());
+                       // movingBall.setDy(-movingBall.getDy());//
                         bricks.remove(i);
                         sound.playSound();
 
@@ -144,7 +148,8 @@ public class GameView extends View {
                 }
 
                 // paddle misses the ball
-                if(movingBall.getyPosition() > paddle.getYPosition() && !movingBall.collideWith(paddle)){
+                if(movingBall.getyPosition()-movingBall.getRadius() >= paddle.getYPosition() && !movingBall.collideWith(paddle)){
+                    // if(movingBall.getyPosition()+movingBall.getRadius() > paddle.getYPosition()+paddle.getHeight() && !movingBall.collideWith(paddle)){
                     countLives--;
                     if(countLives == 0){
                         state = State.GAME_OVER;
@@ -159,6 +164,7 @@ public class GameView extends View {
                 break;
 
             case GAME_OVER:
+                sound.releaseSP();
                 if(bricks.getBricks().size() == 0){//WINN
                     canvas.drawText("WELL DONE! - You Win ", canvasWidth/2, canvasHeight/2, penMsg);
                     canvas.drawText("Touch the screen to start new game", canvasWidth/2, canvasHeight/2 + penMsg.getTextSize()+5, penMsg);

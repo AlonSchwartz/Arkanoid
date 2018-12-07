@@ -91,10 +91,11 @@ public class Ball {
         setxPosition(xNewLocation);
         setyPosition(yNewLocation);
     }
+
     public void move(int w, int h)
     {
-       this.xPosition+= dx;
-      this.yPosition+= -dy;
+        this.xPosition+= dx;
+        this.yPosition+= -dy;
 
         // check if ball out of left or right side
         if((xPosition-radius)<=0 || (xPosition+radius)>=w)
@@ -113,35 +114,85 @@ public class Ball {
 
     public boolean collideWith(Paddle paddle)
     {
+
+        // top left corner
+        float temp = paddle.getXPosition()+paddle.getSpeed()-this.xPosition;
+        float temp2 = paddle.getYPosition() - this.yPosition;
+
+        double a = Math.pow(temp, 2);
+        double b = Math.pow(temp2, 2);
+
+        double dist = (int)Math.sqrt(a+b);
+
+        if (dist-radius <= 0) {
+          //  System.out.println(dist +" " +radius);
+           // System.out.println(dist -radius);
+//            System.out.println("HI 1");
+
+            if (this.xPosition > paddle.getXPosition())
+            {
+                dy=-dy;
+            }
+            else {
+                dy = -dy;
+                dx = -dx;
+            }
+            this.yPosition-=paddle.getHeight()/2;//needs more testing with the ball
+             return true;
+        }
+
+        // top right corner
+        float temp3 = paddle.getXPosition()+paddle.getWidth()+paddle.getSpeed()-this.xPosition;
+        float temp4 = paddle.getYPosition() - this.yPosition;
+
+        double c = Math.pow(temp3, 2);
+        double d = Math.pow(temp4, 2);
+
+        double dist2 = (int)Math.sqrt(c+d);
+
+        if (dist2-radius <= 0) {
+            System.out.println("HI 2");
+            System.out.println(dist2 -radius);
+
+            if (this.xPosition < paddle.getXPosition()+paddle.getWidth())
+            {
+                dy=-dy;
+            }
+            else{
+                dy = -dy;
+                dx = -dx;
+            }
+            this.yPosition-=paddle.getSpeed();//needs more testing with the ball
+            return true;
+        }
+
+        float dis = Math.abs(-this.yPosition+paddle.getYPosition());
+        if (dis-radius <= 0 && this.xPosition > paddle.getXPosition() && this.xPosition < paddle.getXPosition()+paddle.getWidth()) {
+           // System.out.println("boom");
+            dy=-dy;
+            //dx=-dx;
+            this.yPosition-=paddle.getSpeed();//needs more testing with the ball
+            return true;
+        }
+
+
+
+/*
+// does the same thing, but working a bit different. each version of some problems, need to check which one is with less problems
+
         if ((paddle.getXPosition() <= this.xPosition-radius) && (paddle.getXPosition()+paddle.getWidth() > this.xPosition+radius))
         {
             if ((this.yPosition+radius == paddle.getYPosition()) && this.yPosition-radius < paddle.getYPosition())
             {
+                // Hit from up only changes the y position of the ball
                 System.out.println("HIT FROM UP");
                 //dx=-dx;
-                //dy=-dy;
+                dy=-dy;
+                //this.yPosition-=paddle.getSpeed();
+
                 return true;
             }
         }
-
-        // If the x position of the ball is between the paddle x boundaries
-        /*
-        if ((this.xPosition+this.radius >= paddle.getXPosition()) && (this.xPosition+this.radius <= paddle.getXPosition()+paddle.getWidth()) )
-        {
-            // and also y position of the ball is touching the paddle
-            if ((this.yPosition+this.radius >= paddle.getYPosition()) && (this.yPosition + this.radius<=paddle.getYPosition()+paddle.getHeight()))
-            {
-                // HIT! Change the ball direction
-                //dy = -dy;
-                System.out.println("if 0");
-
-                return true;
-            }
-
-
-            // we can add hitLocation. up = 0, right = 1, left = 2. to do get methods for them and to check in gameView for collideWith paddle+getHitLocation = 1/2/3
-            // and then change the direction of the ball accordingly
-        }*/
 
         // If there is a hit on the right side of the paddle
         if (this.xPosition-radius <= paddle.getXPosition()+paddle.getWidth() && this.xPosition+radius > paddle.getXPosition()+paddle.getWidth())
@@ -149,9 +200,11 @@ public class Ball {
             if (this.yPosition+radius >= paddle.getYPosition() && this.yPosition-radius < paddle.getYPosition())
             {
                 System.out.println("HIT FROM RIGHT");
+                // hit at the corners will change the x position too
+                dx = -dx;
+               dy=-dy;
+                this.yPosition-=paddle.getSpeed();
 
-                //dx = -dx;
-               // dy=-dy;
                 return true;
             }
         }
@@ -162,12 +215,16 @@ public class Ball {
            if (this.yPosition+radius >= paddle.getYPosition() && this.yPosition-radius < paddle.getYPosition())
             {
                 System.out.println("HIT FROM LEFT");
+                // hit at the corners will change the x position too
 
-                // dx = -dx;
-               // dy=-dy;
+                dx = -dx;
+               dy=-dy;
+                this.yPosition-=paddle.getSpeed();
                 return true;
             }
         }
+*/
+
         return false;
 
 
@@ -178,6 +235,7 @@ public class Ball {
         // FULL hit up or down
         if (this.xPosition+radius >= brick.getxPosition() && this.xPosition+radius <= brick.getxPosition()+brick.getWidth()){
             if (this.yPosition-radius <= brick.getyPosition()+brick.getHeight() && (this.yPosition+radius > brick.getyPosition())) {
+               dy=-dy;
                 return true;
             }
         }
@@ -185,6 +243,7 @@ public class Ball {
         // PARTLY hit from left up or down, including from the side
         if ((brick.getxPosition() >= this.xPosition-radius) && (brick.getxPosition() <= this.xPosition+radius  ) ){
             if (this.yPosition-radius < brick.getyPosition()+brick.getHeight() && this.yPosition+radius > brick.getyPosition()) {
+                dy=-dy;
                 return true;
             }
         }
@@ -192,6 +251,7 @@ public class Ball {
         // PARTLY hit from right up or down, including from the side
         if (this.xPosition-radius <= brick.getxPosition()+brick.getWidth() && this.xPosition+radius >= brick.getxPosition()+brick.getWidth()) {
             if (this.yPosition - radius <= brick.getyPosition() + brick.getHeight() && (this.yPosition + radius > brick.getyPosition())) {
+                dy=-dy;
                 return true;
             }
         }
