@@ -20,7 +20,7 @@ public class Ball {
         this.dy = 0;
         this.pen = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.color = Color.BLACK;
-        this.radius = 20;
+
     }
 
     /**********************************************************/
@@ -129,7 +129,7 @@ public class Ball {
            // System.out.println(dist -radius);
 //            System.out.println("HI 1");
 
-            if (this.xPosition > paddle.getXPosition())
+            if (this.xPosition+radius > paddle.getXPosition())
             {
                 dy=-dy;
             }
@@ -137,7 +137,7 @@ public class Ball {
                 dy = -dy;
                 dx = -dx;
             }
-            this.yPosition-=paddle.getHeight()/2;//needs more testing with the ball
+            this.yPosition-=paddle.getHeight()+10;//needs more testing with the ball
              return true;
         }
 
@@ -154,7 +154,7 @@ public class Ball {
             System.out.println("HI 2");
             System.out.println(dist2 -radius);
 
-            if (this.xPosition < paddle.getXPosition()+paddle.getWidth())
+            if (this.xPosition-radius < paddle.getXPosition()+paddle.getWidth())
             {
                 dy=-dy;
             }
@@ -162,16 +162,16 @@ public class Ball {
                 dy = -dy;
                 dx = -dx;
             }
-            this.yPosition-=paddle.getSpeed();//needs more testing with the ball
+            this.yPosition-=paddle.getSpeed()+10;//needs more testing with the ball
             return true;
         }
 
         float dis = Math.abs(-this.yPosition+paddle.getYPosition());
         if (dis-radius <= 0 && this.xPosition > paddle.getXPosition() && this.xPosition < paddle.getXPosition()+paddle.getWidth()) {
-           // System.out.println("boom");
+         //  System.out.println("boom");
             dy=-dy;
             //dx=-dx;
-            this.yPosition-=paddle.getSpeed();//needs more testing with the ball
+            this.yPosition-=paddle.getSpeed()+10;//needs more testing with the ball
             return true;
         }
 

@@ -52,39 +52,52 @@ public class GameView extends View {
             adjustHeight = (canvasHeight/2.0f);
         }
         // init brick collection
-        bricks = new BrickCollection((canvasWidth/col)-padding, (adjustHeight/row) - padding,padding/2,canvasHeight*(7.0f/100.0f)+padding, padding);
+        bricks = new BrickCollection((canvasWidth/col)-padding, (adjustHeight/row) - padding,padding/2,canvasHeight*(9.0f/100.0f)+padding, padding);
 
 
         // paint for info text
         penInfo = new Paint(Paint.ANTI_ALIAS_FLAG);
         penInfo.setColor(Color.BLACK);
-        penInfo.setTextSize(45);
+        penInfo.setTextSize(canvasHeight/17);//45
         penInfo.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
 
         // paint for messages text
         penMsg = new Paint(Paint.ANTI_ALIAS_FLAG);
         penMsg.setTextAlign(Paint.Align.CENTER);
-        penMsg.setColor(Color.GREEN);
+        penMsg.setColor(Color.WHITE);
         penMsg.setStyle(Paint.Style.STROKE);
         penMsg.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        penMsg.setTextSize(55);
+        penMsg.setTextSize(canvasHeight/13);//55
 
     }
 
     private void initCanvas()
     {
         state = State.GET_READY;
-        // initialize ball
-        movingBall = new Ball(canvasWidth /2.0f-100, canvasHeight-80, 50);
-        movingBall.setDx(-7);
-        movingBall.setDy(5);
+
         // Initialize paddle
         float paddleWidth = canvasWidth*(15.0f/100.0f);// 15%
         float paddleHeight = canvasHeight*(3.0f/100.0f);// 3%
         paddle = new Paddle(paddleWidth ,paddleHeight);
         paddle.setXPosition((canvasWidth / 2)-(paddle.getWidth())/2.0f);
         paddle.setYPosition(canvasHeight-45);
+
+        // initialize ball
+        movingBall = new Ball(paddle.getXPosition()+paddle.getWidth()/2, paddle.getYPosition()-20, 20);
+        movingBall.setDx(canvasWidth/-(169));//nexus 4 will get -7, but bigger screen will adjust
+        movingBall.setDy(canvasHeight/153);//nexus 4 will get 5, but bigger screen will adjust
+
+        //movingBall.setRadius((((float)canvasWidth/canvasHeight)*((float)25)/2));
+
+        paddle.setStartingSpeed(canvasWidth/118);
+
+        System.out.println("width = " + canvasWidth + " height = " + canvasHeight);
+        System.out.println("dx = " + movingBall.getDx() + " dy = " + movingBall.getDy());
+        System.out.println("speed = "+ paddle.getStartingSpeed());
+        System.out.println("radius = "+ movingBall.getRadius());
+        System.out.println("(canvasWidth/canvasHeight)*(25/2) = " + canvasWidth/canvasHeight + " * " + 25/2 );
+
     }
 
     @Override
@@ -126,6 +139,7 @@ public class GameView extends View {
                 movingBall.move(canvasWidth, canvasHeight);
                 // check bricks and paddle collision with the ball
                 if (movingBall.collideWith(paddle)){
+
                   // movingBall.setDy(-(movingBall.getDy()));
                     //movingBall.setDx(-(movingBall.getDx()));
 
@@ -148,7 +162,7 @@ public class GameView extends View {
                 }
 
                 // paddle misses the ball
-                if(movingBall.getyPosition()-movingBall.getRadius() >= paddle.getYPosition() && !movingBall.collideWith(paddle)){
+                if(movingBall.getyPosition()-movingBall.getRadius() >= paddle.getYPosition()){
                     // if(movingBall.getyPosition()+movingBall.getRadius() > paddle.getYPosition()+paddle.getHeight() && !movingBall.collideWith(paddle)){
                     countLives--;
                     if(countLives == 0){

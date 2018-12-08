@@ -8,9 +8,9 @@ public class Paddle {
 
     private float width, height, xPosition, yPosition;
     private static final float xStartingPosition=500, yStartingPosition=650;
-    private static final int RIGHT=0, LEFT=1, STARTING_SPEED = 10;
+    private static final int RIGHT=0, LEFT=1;
     private Paint pen;
-    private int color = Color.BLUE, speed;
+    private int color = Color.BLUE, speed, startingSpeed = 10;
 
 
     // Constructor
@@ -64,7 +64,9 @@ public class Paddle {
 
     public void setSpeed(int speed) {this.speed = speed; }
 
-    public static int getStartingSpeed() { return STARTING_SPEED; }
+    public int getStartingSpeed() { return startingSpeed; }
+
+    public void setStartingSpeed(int speed){this.startingSpeed = speed;}
 
     /**********************************************************/
 
