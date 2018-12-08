@@ -11,8 +11,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.Random;
+
 public class GameView extends View {
-    //private MediaPlayer mediaPlayer;
     private SoundPlayer sound;
     // states
     private enum State {GET_READY, PLAYING, GAME_OVER};
@@ -58,7 +59,7 @@ public class GameView extends View {
         // paint for info text
         penInfo = new Paint(Paint.ANTI_ALIAS_FLAG);
         penInfo.setColor(Color.BLACK);
-        penInfo.setTextSize(canvasHeight/17);//45
+        penInfo.setTextSize(canvasHeight/17.0f);//45
         penInfo.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
 
@@ -68,7 +69,7 @@ public class GameView extends View {
         penMsg.setColor(Color.WHITE);
         penMsg.setStyle(Paint.Style.STROKE);
         penMsg.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        penMsg.setTextSize(canvasHeight/13);//55
+        penMsg.setTextSize(canvasHeight/13.0f);//55
 
     }
 
@@ -83,12 +84,14 @@ public class GameView extends View {
         paddle.setXPosition((canvasWidth / 2)-(paddle.getWidth())/2.0f);
         paddle.setYPosition(canvasHeight-45);
 
+        /*randomize ball direction*/
+        Random ran = new Random();
+        int direction[]={1,-1};
+        int lor = direction[ran.nextInt(2)];
         // initialize ball
         movingBall = new Ball(paddle.getXPosition()+paddle.getWidth()/2, paddle.getYPosition()-20, 20);
-        movingBall.setDx(canvasWidth/-(169));//nexus 4 will get -7, but bigger screen will adjust
+        movingBall.setDx(canvasWidth/(lor*(169)));//nexus 4 will get -7, but bigger screen will adjust
         movingBall.setDy(canvasHeight/153);//nexus 4 will get 5, but bigger screen will adjust
-
-        //movingBall.setRadius((((float)canvasWidth/canvasHeight)*((float)25)/2));
 
         paddle.setStartingSpeed(canvasWidth/118);
 
@@ -138,22 +141,10 @@ public class GameView extends View {
                 // move the movingBall
                 movingBall.move(canvasWidth, canvasHeight);
                 // check bricks and paddle collision with the ball
-                if (movingBall.collideWith(paddle)){
-
-                  // movingBall.setDy(-(movingBall.getDy()));
-                    //movingBall.setDx(-(movingBall.getDx()));
-
-                    // just from checking...
-                    //movingBall.setDy(0);
-                    //movingBall.setDx(0);
-
-                }
+                movingBall.collideWith(paddle);
 
                     for(int i =0 ; i<bricks.getBricks().size();i++){
                     if (movingBall.collideWith(bricks.getBricks().get(i))) {
-                        // the following logic should be adjusted
-                       // movingBall.setDx(-movingBall.getDx());
-                       // movingBall.setDy(-movingBall.getDy());//
                         bricks.remove(i);
                         sound.playSound();
 
@@ -163,7 +154,6 @@ public class GameView extends View {
 
                 // paddle misses the ball
                 if(movingBall.getyPosition()-movingBall.getRadius() >= paddle.getYPosition()){
-                    // if(movingBall.getyPosition()+movingBall.getRadius() > paddle.getYPosition()+paddle.getHeight() && !movingBall.collideWith(paddle)){
                     countLives--;
                     if(countLives == 0){
                         state = State.GAME_OVER;

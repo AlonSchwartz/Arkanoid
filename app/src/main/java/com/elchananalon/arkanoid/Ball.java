@@ -243,7 +243,7 @@ public class Ball {
         // PARTLY hit from left up or down, including from the side
         if ((brick.getxPosition() >= this.xPosition-radius) && (brick.getxPosition() <= this.xPosition+radius  ) ){
             if (this.yPosition-radius < brick.getyPosition()+brick.getHeight() && this.yPosition+radius > brick.getyPosition()) {
-                dy=-dy;
+                dx = -dx;
                 return true;
             }
         }
@@ -251,7 +251,7 @@ public class Ball {
         // PARTLY hit from right up or down, including from the side
         if (this.xPosition-radius <= brick.getxPosition()+brick.getWidth() && this.xPosition+radius >= brick.getxPosition()+brick.getWidth()) {
             if (this.yPosition - radius <= brick.getyPosition() + brick.getHeight() && (this.yPosition + radius > brick.getyPosition())) {
-                dy=-dy;
+                dx = -dx;
                 return true;
             }
         }
